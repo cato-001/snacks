@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "a nom extension library"
 license = "MIT"
+repository = "https://github.com/cato-001/snacks"
 
 [dependencies]
 nom = "8.0.0"
