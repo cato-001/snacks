@@ -3,7 +3,7 @@ name = "snacks"
 version = "0.1.0"
 edition = "2021"
 description = "a nom extension library"
-licence = "MIT"
+license = "MIT"
 
 [dependencies]
 nom = "8.0.0"
