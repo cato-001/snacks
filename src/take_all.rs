@@ -1,5 +1,4 @@
 use nom::error::ParseError;
-use nom::sequence::preceded;
 use nom::{IResult, Parser};
 
 pub fn take_all<'a, Input: Copy, Output, Error: ParseError<Input>>(
@@ -18,9 +17,11 @@ pub fn take_all_into<'a, Input: Copy, Output, Error: ParseError<Input>>(
     prefix: impl Parser<Input, Error = Error>,
     item: impl Parser<Input, Output = Output, Error = Error>,
 ) -> impl FnMut(Input, &mut Vec<Output>) -> IResult<Input, ()> {
-    let mut parser = preceded(prefix, item);
+    let mut prefix = prefix;
+    let mut item = item;
     move |mut start, buffer| loop {
-        let Ok((input, value)) = parser.parse(start) else {
+        let input = prefix.parse(start).map(|(input, _)| input).unwrap_or(start);
+        let Ok((input, value)) = item.parse(input) else {
             return Ok((start, ()));
         };
         buffer.push(value);
@@ -33,6 +34,7 @@ mod tests {
     use nom::bytes::complete::is_not;
     use nom::bytes::is_a;
     use nom::character::complete::one_of;
+    use nom::sequence::preceded;
 
     use super::*;
 
@@ -68,6 +70,19 @@ mod tests {
             preceded(one_of("#"), is_not(" \n")),
         )(input);
         assert_eq!(Ok(("\nword4", vec!["tag1", "tag2", "tag3"])), result);
+    }
+
+    #[test]
+    fn can_take_from_start() {
+        let input = "#tag0 word1 word2 #tag1\n#tag2 word3\n#tag3\nword4";
+        let result = take_all::<_, _, nom::error::Error<_>>(
+            is_not("#"),
+            preceded(one_of("#"), is_not(" \n")),
+        )(input);
+        assert_eq!(
+            Ok(("\nword4", vec!["tag0", "tag1", "tag2", "tag3"])),
+            result
+        );
     }
 
     #[test]
