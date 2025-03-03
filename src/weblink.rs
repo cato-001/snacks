@@ -1,5 +1,5 @@
 use nom::branch::alt;
-use nom::bytes::complete::{is_a, tag};
+use nom::bytes::complete::tag;
 use nom::character::complete::char;
 use nom::combinator::recognize;
 use nom::error::ErrorKind;
