@@ -3,7 +3,7 @@ use nom::{error::ParseError, FindSubstring, IResult, Parser};
 pub fn find_all<I, N, P, Error>(needle: N, item: P) -> impl FnMut(I) -> IResult<I, Vec<P::Output>>
 where
     I: FindSubstring<N> + nom::Input + Copy,
-    N: Copy,
+    N: nom::Input + Copy,
     P: Parser<I, Error = Error>,
     Error: ParseError<I>,
 {
@@ -21,7 +21,7 @@ pub fn find_all_into<I, N, P, Error>(
 ) -> impl FnMut(I, &mut Vec<P::Output>) -> IResult<I, ()>
 where
     I: FindSubstring<N> + nom::Input + Copy,
-    N: Copy,
+    N: nom::Input + Copy,
     P: Parser<I, Error = Error>,
     Error: ParseError<I>,
 {
@@ -32,6 +32,7 @@ where
         };
         let input = start.take_from(index);
         let Ok((input, value)) = item.parse(input) else {
+            start = input.take_from(needle.input_len());
             continue;
         };
         buffer.push(value);
