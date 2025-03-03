@@ -1,6 +1,6 @@
 [package]
 name = "snacks"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 description = "a nom extension library"
 license = "MIT"
