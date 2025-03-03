@@ -1,12 +1,10 @@
 use nom::{error::ParseError, FindSubstring, IResult, Parser};
 
-pub fn find_all<'a, Needle, I, Output, Error>(
-    needle: Needle,
-    item: impl Parser<I, Output = Output, Error = Error> + 'a,
-) -> impl FnMut(I) -> IResult<I, Vec<Output>> + 'a
+pub fn find_all<I, N, P, Error>(needle: N, item: P) -> impl FnMut(I) -> IResult<I, Vec<P::Output>>
 where
-    Needle: Copy + 'a,
-    I: FindSubstring<Needle> + nom::Input + Copy + 'a,
+    I: FindSubstring<N> + nom::Input + Copy,
+    N: Copy,
+    P: Parser<I, Error = Error>,
     Error: ParseError<I>,
 {
     let mut parser = find_all_into(needle, item);
@@ -17,14 +15,15 @@ where
     }
 }
 
-pub fn find_all_into<'a, Needle, Input, Output, Error>(
-    needle: Needle,
-    item: impl Parser<Input, Output = Output, Error = Error> + 'a,
-) -> impl FnMut(Input, &mut Vec<Output>) -> IResult<Input, ()> + 'a
+pub fn find_all_into<I, N, P, Error>(
+    needle: N,
+    item: P,
+) -> impl FnMut(I, &mut Vec<P::Output>) -> IResult<I, ()>
 where
-    Needle: Copy + 'a,
-    Input: FindSubstring<Needle> + nom::Input + Copy + 'a,
-    Error: ParseError<Input>,
+    I: FindSubstring<N> + nom::Input + Copy,
+    N: Copy,
+    P: Parser<I, Error = Error>,
+    Error: ParseError<I>,
 {
     let mut item = item;
     move |mut start, buffer| loop {
