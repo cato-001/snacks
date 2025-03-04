@@ -2,9 +2,12 @@
 name = "snacks"
 version = "0.1.7"
 edition = "2021"
-description = "a nom extension library"
+description = "more nom parser-combinators"
 license = "MIT"
 repository = "https://github.com/cato-001/snacks"
+documentation = "https://docs.rs/snacks/latest/snacks/"
+keywords = ["nom", "parser", "parser-combinators", "parsing"]
+categories = ["parsing"]
 
 [dependencies]
 nom = "8.0.0"
