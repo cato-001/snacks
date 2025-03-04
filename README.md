@@ -1,10 +1,16 @@
 # nom snacks
 
+- [Github](https://github.com/cato-001/snacks)
+- [Crates.io](https://crates.io/crates/snacks)
+- [Documentation]()
+
 More useful parser-combinators for [nom](https://crates.io/crates/nom).
 
 To add this library to your project run:
 
-    cargo add snacks
+```bash
+cargo add snacks
+```
 
 ## find all
 
