@@ -2,15 +2,25 @@
 
 - [Github](https://github.com/cato-001/snacks)
 - [Crates.io](https://crates.io/crates/snacks)
-- [Documentation]()
+- [Documentation](https://docs.rs/snacks/latest/snacks/)
+
+- parsers:
+    - [combinators](#combinators)
+    - [values](#values)
 
 More useful parser-combinators for [nom](https://crates.io/crates/nom).
+
+> **WARNING!** This project is still in development.
+>
+> If a parser looks useful, it may be more practical to copy it to your project.
 
 To add this library to your project run:
 
 ```bash
 cargo add snacks
 ```
+
+# combinators
 
 ## find all
 
@@ -56,4 +66,7 @@ assert_eq!(Ok((" tags!", vec!["sentence", "cool"])), result);
 
 > `take_all_into`
 > This method can be used to push the items into a buffer, for saving allocations.
+
+# values
+
 
