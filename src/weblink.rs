@@ -7,10 +7,21 @@ use nom::{AsChar, IResult, Input, Parser};
 
 use crate::recognize_separated::recognize_separated0;
 
+/// Takes a weblink from the input.
+///
+/// ```rust
+/// use snacks::weblink;
+///
+/// let input = "https://github.com/cato-001/snacks.git other";
+/// let result = weblink(input);
+/// assert_eq!(
+///     Ok((" other", "https://github.com/cato-001/snacks.git")),
+///     result
+/// );
+/// ```
 pub fn weblink(input: &str) -> IResult<&str, &str> {
     recognize((
-        alt((tag("https"), tag("http"))),
-        tag("://"),
+        alt((tag("https://"), tag("http://"))),
         recognize_separated0(link_char, char('/')),
     ))
     .parse(input)

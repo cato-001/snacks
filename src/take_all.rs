@@ -1,7 +1,25 @@
 use nom::error::ParseError;
 use nom::{IResult, Parser};
 
-pub fn take_all<'a, Input: Copy, Output, Error: ParseError<Input>>(
+/// Takes the items from the item parser, possibly preceded by a prefix parser.
+///
+/// If the prefix parser fails, the item parser is still executed.
+/// When the item parser succeeds the item is collected.
+///
+/// ```rust
+/// use snacks::take_all;
+/// use nom::bytes::complete::{is_a, is_not};
+/// use nom::character::complete::one_of;
+/// use nom::sequence::preceded;
+///
+/// let input = "An example #sentence with #cool tags!";
+/// let result = take_all::<_, _, nom::error::Error<_>>(
+///     is_not("#"),
+///     preceded(one_of("#"), is_not(" ")),
+/// )(input);
+/// assert_eq!(Ok((" tags!", vec!["sentence", "cool"])), result);
+/// ```
+pub fn take_all<Input: Copy, Output, Error: ParseError<Input>>(
     prefix: impl Parser<Input, Error = Error>,
     item: impl Parser<Input, Output = Output, Error = Error>,
 ) -> impl FnMut(Input) -> IResult<Input, Vec<Output>> {
@@ -13,7 +31,30 @@ pub fn take_all<'a, Input: Copy, Output, Error: ParseError<Input>>(
     }
 }
 
-pub fn take_all_into<'a, Input: Copy, Output, Error: ParseError<Input>>(
+/// Takes the items from the item parser, possibly preceded by a prefix parser,
+/// and pushes the items to the provided vector.
+///
+/// If the prefix parser fails, the item parser is still executed.
+/// When the item parser succeeds the item is collected.
+///
+/// ```rust
+/// use snacks::take_all_into;
+/// use nom::bytes::complete::{is_a, is_not};
+/// use nom::character::complete::one_of;
+/// use nom::sequence::preceded;
+///
+/// let input = "An example #sentence with #cool tags!";
+///
+/// let mut buffer = Vec::new();
+/// let result = take_all_into::<_, _, nom::error::Error<_>>(
+///     is_not("#"),
+///     preceded(one_of("#"), is_not(" ")),
+/// )(input, &mut buffer);
+///
+/// assert_eq!(Ok((" tags!", ())), result);
+/// assert_eq!(vec!["sentence", "cool"], buffer);
+/// ```
+pub fn take_all_into<Input: Copy, Output, Error: ParseError<Input>>(
     prefix: impl Parser<Input, Error = Error>,
     item: impl Parser<Input, Output = Output, Error = Error>,
 ) -> impl FnMut(Input, &mut Vec<Output>) -> IResult<Input, ()> {
@@ -31,8 +72,7 @@ pub fn take_all_into<'a, Input: Copy, Output, Error: ParseError<Input>>(
 
 #[cfg(test)]
 mod tests {
-    use nom::bytes::complete::is_not;
-    use nom::bytes::is_a;
+    use nom::bytes::complete::{is_a, is_not};
     use nom::character::complete::one_of;
     use nom::sequence::preceded;
 

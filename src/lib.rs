@@ -1,3 +1,5 @@
+//! This crate includes more parser combinators to use with [`nom`].
+
 pub use {
     find_all::{find_all, find_all_into},
     recognize_separated::{recognize_separated0, recognize_separated1},

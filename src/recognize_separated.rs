@@ -3,7 +3,7 @@ use nom::{IResult, Input, Parser};
 
 /// Runs the item parser interlaced by the separator parser.
 ///
-/// The main difference to the `separated_list0` parser from nom is,
+/// The main difference to the [`nom::multi::separated_list0`] parser is,
 /// that this parser returns the recognized string without allocating a list.
 ///
 /// If the item parser does not complete successfully at least one time,
@@ -44,7 +44,7 @@ where
 
 /// Runs the item parser interlaced by the separator parser.
 ///
-/// The main difference to the `separated_list1` parser from nom is,
+/// The main difference to the [`nom::multi::separated_list1`] parser from nom is,
 /// that this parser returns the recognized string without allocating a list.
 ///
 /// If the item parser does not complete successfully at least one time,

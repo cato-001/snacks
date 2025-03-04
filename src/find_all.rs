@@ -1,5 +1,19 @@
 use nom::{error::ParseError, FindSubstring, IResult, Parser};
 
+/// Run the parser at each found substring.
+///
+/// ```rust
+/// use snacks::find_all;
+/// use nom::character::complete::{alphanumeric1, char};
+/// use nom::sequence::delimited;
+///
+/// let input = "This is a {text} with some {special} {words}!";
+/// let result = find_all::<_, _, _, nom::error::Error<_>>(
+///     "{",
+///     delimited(char('{'), alphanumeric1, char('}')),
+/// )(input);
+/// assert_eq!(Ok(("!", vec!["text", "special", "words"])), result);
+/// ```
 pub fn find_all<I, N, P, Error>(needle: N, item: P) -> impl FnMut(I) -> IResult<I, Vec<P::Output>>
 where
     I: FindSubstring<N> + nom::Input + Copy,
@@ -15,6 +29,24 @@ where
     }
 }
 
+/// Run the parser at each found substring,
+/// and push the results into the provided vector.
+///
+/// ```rust
+/// use snacks::find_all_into;
+/// use nom::character::complete::{alphanumeric1, char};
+/// use nom::sequence::delimited;
+///
+/// let input = "This is a {text} with some {special} {words}!";
+///
+/// let mut buffer = Vec::new();
+/// let result = find_all_into::<_, _, _, nom::error::Error<_>>(
+///     "{",
+///     delimited(char('{'), alphanumeric1, char('}')),
+/// )(input, &mut buffer);
+///
+/// assert_eq!(vec!["text", "special", "words"], buffer);
+/// ```
 pub fn find_all_into<I, N, P, Error>(
     needle: N,
     item: P,

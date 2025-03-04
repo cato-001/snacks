@@ -4,7 +4,7 @@
 [Crates.io](https://crates.io/crates/snacks) |
 [Documentation](https://docs.rs/snacks/latest/snacks/)
 
-- parsers:
+- Parsers
     - [combinators](#combinators)
     - [values](#values)
 
@@ -42,7 +42,7 @@ assert_eq!(Ok(("!", vec!["text", "special", "words"])), result);
 
 Runs the item parser interlaced by the separator parser.
 
-The main difference to the `separated_list0` parser from nom is,
+The main difference to the [`separated_list0`](https://docs.rs/nom/latest/nom/multi/fn.separated_list0.html) parser from nom is,
 that this parser returns the recognized string without allocating a list.
 
 ```rust
@@ -69,4 +69,9 @@ assert_eq!(Ok((" tags!", vec!["sentence", "cool"])), result);
 
 # values
 
+## weblink
 
+Takes a link from the input.
+
+```rust
+```
