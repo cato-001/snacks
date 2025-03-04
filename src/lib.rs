@@ -5,7 +5,7 @@ pub use {
     recognize_separated::{recognize_separated0, recognize_separated1},
     simple::{alphanumdot0, alphanumdot1},
     take_all::{take_all, take_all_into},
-    weblink::weblink,
+    weblink::{link_char, weblink},
 };
 
 mod find_all;

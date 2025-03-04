@@ -1,6 +1,6 @@
 [package]
 name = "snacks"
-version = "0.1.8"
+version = "0.1.9"
 edition = "2021"
 description = "more nom parser-combinators"
 license = "MIT"

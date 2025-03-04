@@ -27,6 +27,14 @@ pub fn weblink(input: &str) -> IResult<&str, &str> {
     .parse(input)
 }
 
+/// Characters valid in a weblink
+///
+/// Function is currently not complete, but is extended as needed.
+///
+/// Currently included:
+/// - lowercase and uppercase letters
+/// - numbers
+/// - dash, underscore and dot
 pub fn link_char(input: &str) -> IResult<&str, &str> {
     input.split_at_position1_complete(
         |char| !(char.is_alphanum() || matches!(char, '-' | '_' | '.')),
