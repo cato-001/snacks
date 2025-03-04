@@ -1,7 +1,9 @@
 # nom snacks
 
 [Github](https://github.com/cato-001/snacks)
+
 [Crates.io](https://crates.io/crates/snacks)
+
 [Documentation](https://docs.rs/snacks/latest/snacks/)
 
 - parsers:
