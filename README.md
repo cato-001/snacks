@@ -1,8 +1,12 @@
-# Nom Snacks
+# nom snacks
 
-More NOM parser combinators.
+More useful parser-combinators for [nom](https://crates.io/crates/nom).
 
-## Find All
+To add this library to your project run:
+
+    cargo add snacks
+
+## find all
 
 Run the parser at each found substring.
 
@@ -18,7 +22,7 @@ assert_eq!(Ok(("!", vec!["text", "special", "words"])), result);
 > `find_all_into`
 > This method can be used to push the items into a buffer, for saving allocations.
 
-## Recognize Separated
+## recognize separated
 
 Runs the item parser interlaced by the separator parser.
 
@@ -31,7 +35,7 @@ let result = recognize_separated0::<_, _, _, nom::error::Error<_>>(alphanumeric1
 assert_eq!(Ok((" other", "comma,separated,words")), result);
 ```
 
-## Take All
+## take all
 
 Takes the items from the item parser, preceded by a prefix parser.
 
