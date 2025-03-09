@@ -1,4 +1,44 @@
+use nom::error::ErrorKind;
 use nom::{error::ParseError, FindSubstring, IResult, Parser};
+
+/// Run the parser at each found substring,
+/// until the parser completes successfully, then return the result.
+///
+/// ```rust
+/// use snacks::find_first;
+/// use nom::character::complete::{alphanumeric1, char};
+/// use nom::sequence::delimited;
+///
+/// let input = "This is a {text} with some {special} {words}!";
+/// let result = find_first::<_, _, _, nom::error::Error<_>>(
+///     "{",
+///     delimited(char('{'), alphanumeric1, char('}')),
+/// )(input);
+/// assert_eq!(Ok((" with some {special} {words}!", "text")), result);
+/// ```
+pub fn find_first<I, N, P, Error>(needle: N, item: P) -> impl FnMut(I) -> IResult<I, P::Output>
+where
+    I: FindSubstring<N> + nom::Input + Copy,
+    N: nom::Input + Copy,
+    P: Parser<I, Error = Error>,
+    Error: ParseError<I>,
+{
+    let mut item = item;
+    move |mut start| loop {
+        let Some(index) = start.find_substring(needle) else {
+            return Err(nom::Err::Error(nom::error::Error::new(
+                start,
+                ErrorKind::Fail,
+            )));
+        };
+        let input = start.take_from(index);
+        let Ok((input, value)) = item.parse(input) else {
+            start = input.take_from(needle.input_len());
+            continue;
+        };
+        return Ok((input, value));
+    }
+}
 
 /// Run the parser at each found substring.
 ///
