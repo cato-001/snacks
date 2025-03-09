@@ -1,6 +1,6 @@
 [package]
 name = "snacks"
-version = "0.1.10"
+version = "0.1.11"
 edition = "2021"
 description = "more nom parser-combinators"
 license = "MIT"
@@ -10,4 +10,5 @@ keywords = ["nom", "parser", "parser-combinators", "parsing"]
 categories = ["parsing"]
 
 [dependencies]
+anyhow = "1.0.97"
 nom = "8.0.0"
